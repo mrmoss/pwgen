@@ -21,7 +21,14 @@ Made quickly...probably terrible and already exists...but it makes passwords...I
 
 ## Example Usage
 
-    # ./pwgen -n 10 -w 6 /usr/share/dict/
+### Use a single dictionary to create a single password with 5 words
+
+	# ./pwgen /usr/share/dict/english.txt
+	temprerei/Unlocomotive.removal6Elastose*
+
+### Use all dictionaries in /usr/share/dict/ and create 10 passwords with 6 words each
+
+    # ./pwgen -n 10 -w 6 /usr/share/dict/*
     1auditors-barfliesAZZUFFAIcessasse{zygosporicAUTORIZZAI+
     #THALLUS-UNTRAVELABLE/Firbolg0Gurnetty%sclerized<NILOT
     MAGNETOBELLmoninoSUBERINIZE#AWNINGS*spoucher*INCHINAVA}
