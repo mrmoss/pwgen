@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+import argparse
+import random
+import re
+import sys
+
+def main():
+	default_num_passwords=1
+	default_separators='!"#$%&\'( )*+,-./0123456789:;<=>?@[\\]^_`{|}~'
+	default_num_words=4
+	parser=argparse.ArgumentParser(description='Creates passwords')
+	parser.add_argument('dictpaths',metavar='DICTPATH',type=str,nargs='+',help='Path(s) to a newline separated dictionary')
+	parser.add_argument('-n','--num-passwords',metavar='N',type=int,default=default_num_passwords,help='Number of passwords to generate - default: %d'%default_num_passwords)
+	parser.add_argument('-s','--separators',metavar='CHARS',type=str,default=default_separators,help='Characters used for separators - default: %s'%default_separators.replace('%','%%'))
+	parser.add_argument('-w','--num-words',metavar='N',type=int,default=default_num_words,help='Number of words to use - default: %d'%default_num_words)
+	args=parser.parse_args()
+
+	def random_sep():
+		if args.separators:
+			return random.choice(args.separators)
+		return ''
+
+	words={}
+
+	for dict_path in args.dictpaths:
+		fd=open(dict_path,'r')
+		lines=fd.read().strip().split('\n')
+		fd.close()
+
+		for line in lines:
+			word=''.join(line.strip().split()[:1]).lower()
+			if not word:
+				continue
+			for ind,ch in enumerate(word):
+				if ch not in 'abcdefghijklmnopqrstuvwxyz':
+					word=word[:ind]
+					break
+			if word:
+				words[word]=True
+
+	words=list(words.keys())
+
+	if len(words)<=0:
+		raise Exception('No valid words found in provided dictionaries')
+
+	for _ in range(args.num_passwords):
+		password=''
+
+		for word_num in range(args.num_words):
+			word_ind=random.randrange(len(words))
+			word=words[word_ind]
+			word=random.choice([word.lower,word.title,word.upper])()
+
+			if random.random()<0.5 or (word_num>0 and password[-1].isupper()==word[0].isupper()):
+				password+=random_sep()
+
+			password+=word
+
+		if random.random()<0.5:
+			password+=random_sep()
+
+		print(password.strip())
+
+if __name__=='__main__':
+	try:
+		main()
+
+	except KeyboardInterrupt:
+		sys.stderr.write('Killing...\n')
+		sys.stderr.flush()
+		exit(-2)
+
+	except Exception as error:
+		sys.stderr.write('Error: %s\n'%error)
+		sys.stderr.flush()
+		exit(-1)
