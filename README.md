@@ -23,8 +23,8 @@ Made quickly...probably terrible and already exists...but it makes passwords...I
 
 ### Use a single dictionary to create a single password with 5 words
 
-	# ./pwgen /usr/share/dict/english.txt
-	temprerei/Unlocomotive.removal6Elastose*
+	# ./pwgen /usr/share/dict/american-english
+	SignificanceDICKENS!PURE7Lagging<
 
 ### Use all dictionaries in /usr/share/dict/ and create 10 passwords with 6 words each
 
